@@ -1,10 +1,13 @@
 package controllers;
 
-import play.*;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import play.Logger;
 import play.db.DB;
-import play.mvc.*;
-
-import views.html.*;
+import play.mvc.BodyParser;
+import play.mvc.Controller;
+import play.mvc.Result;
+import utils.SqlMapper;
+import views.html.index;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -34,7 +37,7 @@ public class Application extends Controller {
         String rtn = "";
         Connection connection = DB.getConnection();
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from wistapp.Students LIMIT 20");
+        ResultSet resultSet = statement.executeQuery("select * from wistapp.Students LIMIT 25");
         try {
             while (resultSet.next()) {
                 for (int i = 1; i < 6; i++) {
@@ -47,5 +50,19 @@ public class Application extends Controller {
         }
         Logger.info("hello world - testing testing");
         return ok(rtn);
+    }
+
+    @BodyParser.Of(BodyParser.Json.class)
+    public static Result getRestaurants() throws SQLException {
+        Connection connection = DB.getConnection();
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("select * from wistapp.Restaurant LIMIT 10");
+        ArrayNode convert = null;
+        try {
+            convert = SqlMapper.convert(resultSet);
+        } finally {
+            statement.close();
+        }
+        return ok(convert);
     }
 }
