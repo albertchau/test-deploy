@@ -7,7 +7,6 @@ import play.mvc.Result;
 import java.util.Random;
 
 import static play.mvc.Results.ok;
-
 /**
  * Metadata class gets the metadata for the table Created by achau1 on 11/23/14.
  */

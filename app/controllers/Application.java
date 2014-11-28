@@ -18,7 +18,7 @@ public class Application extends Controller {
 
 
     public static Result index() throws SQLException {
-        Logger.info("testing testing");
+//        Logger.info("testing testing");
         return ok(index.render("Your new application is READY."));
     }
 

@@ -10,7 +10,13 @@ Play2WarKeys.servletVersion := "3.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
+resolvers += Resolver.sonatypeRepo("snapshots")
+
 scalaVersion := "2.11.1"
+
+libraryDependencies ++= Seq(
+  "ws.securesocial" %% "securesocial" % "master-SNAPSHOT"
+)
 
 libraryDependencies ++= Seq(
   "log4j" % "log4j" % "1.2.14",
@@ -21,3 +27,4 @@ libraryDependencies ++= Seq(
   cache,
   javaWs
 )
+
