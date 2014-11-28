@@ -19,18 +19,7 @@ public class Application extends Controller {
 
     public static Result index() throws SQLException {
         Logger.info("testing testing");
-        Connection connection = DB.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("select * from wistapp.Students LIMIT 20");
-        try {
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString(1));
-                System.out.println(resultSet.getString(2));
-            }
-        } finally {
-            statement.close();
-        }
-        return ok(index.render("Your new application is ready."));
+        return ok(index.render("Your new application is READY."));
     }
 
     public static Result helloWorld() throws SQLException {
@@ -64,5 +53,13 @@ public class Application extends Controller {
             statement.close();
         }
         return ok(convert);
+    }
+
+    public static Result getRestaurant(long id) {
+        return play.mvc.Results.TODO;
+    }
+
+    public static Result createUser() {
+        return play.mvc.Results.TODO;
     }
 }

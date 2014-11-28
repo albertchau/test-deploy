@@ -2,10 +2,10 @@
 
 printf '================================================================================================================\n'
 
-printf 'Running activator and generating the war...\n\n'
-activator clean war
+printf 'Running activator and generating the distribution...\n\n'
+activator clean dist
 
-printf 'Getting target file name...\n\n'
+printf 'Getting target file name and version...\n\n'
 
 NAME=$(sed -n 's/name := \"\{3\}\(.*\)\"\{3\}/\1/p' build.sbt)
 
@@ -25,19 +25,13 @@ else
   printf "Version = $VERSION\n\n"
 fi
 
-FILE_NAME=${NAME}'-'${VERSION}'.war'
+ZIP_FILE_NAME=${NAME}'-'${VERSION}'.zip'
 
-printf 'Copying '${FILE_NAME}' to ROOT.war to transfer over...\n\n'
-cp target/test-deploy-1.0-SNAPSHOT.war target/ROOT.war
+chmod 700 build/wistapp.pem
+printf 'SCPing target/universal/'${NAME}'-'${VERSION}' to ec2-user@54.68.168.234:/home/ec2-user...\n\n'
+scp -i build/wistapp.pem target/universal/${ZIP_FILE_NAME} ec2-user@54.148.242.165:/home/ec2-user
 
-
-printf 'change mode 777 to ROOT.war...\n\n'
-chmod 777 target/ROOT.war
-
-printf 'SCPing ROOT.war to ec2-user@54.68.168.234:/home/ec2-user...\n\n'
-scp -i build/wistapp.pem target/ROOT.war ec2-user@54.68.168.234:/home/ec2-user
-
-printf 'Executing build/deploy_remote to copy over deployed artifact into tomcat /webapps...\n\n'
-ssh -i build/wistapp.pem ec2-user@54.68.168.234 'bash -s' < build/deploy_remote.sh
+printf 'Executing start script inside the distribution '${NAME}'-'${VERSION}'/bin/'${NAME}' folder...\n\n'
+ssh -i build/wistapp.pem ec2-user@54.148.242.165 'sudo bash -s' -- < build/deploy_dist_remote.sh "${NAME}" "${VERSION}"
 
 printf '================================================================================================================\n'
